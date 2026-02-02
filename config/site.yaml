@@ -1,0 +1,55 @@
+# Site Configuration
+# Edit this file to customize your contact page
+
+# Personal Information
+name: "Jared Gholston"
+title: "CTO & Co-founder PartnerTap"
+bio: "Building the future of partner ecosystems and channel collaboration at scale."
+email: ""
+
+# Profile Image
+# Auto-detects avatar.png, avatar.jpg, avatar.jpeg, or avatar.webp in /public folder
+# Or specify a custom path/URL:
+# avatar: "/custom-image.png"
+# gravatarEmail: "your@email.com"  # Alternative: use Gravatar
+
+# Social Links (leave empty or remove to hide)
+social:
+  linkedin: "https://www.linkedin.com/in/jaredgholston/"
+  github: "https://github.com/jarbot"
+  twitter: "https://x.com/jarbot"
+  # instagram: "https://instagram.com/yourusername"
+  # facebook: "https://facebook.com/yourusername"
+  # youtube: "https://youtube.com/@yourchannel"
+  # tiktok: "https://tiktok.com/@yourusername"
+  # mastodon: "https://mastodon.social/@yourusername"
+  # bluesky: "https://bsky.app/profile/yourhandle"
+  # threads: "https://threads.net/@yourusername"
+  # website: "https://yourwebsite.com"
+
+# Theme Configuration (colors are now auto-detected from system preference)
+# These are fallback colors if CSS variables aren't supported
+theme:
+  primaryColor: "#0070f3"
+  backgroundColor: "#F8F4F1"
+  textColor: "#1a1a1a"
+  darkMode: false
+
+# Contact Form Settings
+contactForm:
+  enabled: true
+  heading: "Get in Touch"
+  description: "Have a question or want to work together? Send me a message!"
+  successMessage: "Thank you for your message! I'll get back to you soon."
+  # reCAPTCHA settings - site key goes here, secret key in environment variables
+  recaptcha:
+    enabled: true
+    # Get your site key from https://www.google.com/recaptcha/admin (select v3)
+    # Secret key goes in RECAPTCHA_SECRET_KEY environment variable
+    siteKey: "6LdkmF0sAAAAACDbMTjYKGOTZQBganStqnV9egw_"
+
+# SEO Settings
+seo:
+  title: "Jared Gholston"
+  description: "CTO & Co-founder at PartnerTap - Building the future of partner ecosystems."
+  # ogImage: "/og-image.jpg"
