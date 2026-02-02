@@ -10,29 +10,29 @@ interface SocialLink {
 
 interface SocialLinksProps {
   links: SocialLink[];
-  primaryColor: string;
 }
 
-export function SocialLinks({ links, primaryColor }: SocialLinksProps) {
+export function SocialLinks({ links }: SocialLinksProps) {
   if (!links || links.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap justify-center gap-4">
-      {links.map((link) => (
+    <div className="flex flex-wrap justify-center gap-3">
+      {links.map((link, index) => (
         <a
           key={link.platform}
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-3 rounded-full transition-all duration-200 hover:scale-110"
+          className="w-12 h-12 flex items-center justify-center border rounded-xl social-link"
           style={{
-            backgroundColor: `${primaryColor}15`,
-            color: primaryColor,
+            borderColor: 'var(--border-color)',
+            color: 'var(--text-secondary)',
+            animationDelay: `${(index + 1) * 125}ms`,
           }}
           aria-label={`Visit ${link.platform}`}
           title={link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
         >
-          <SocialIcon platform={link.platform} className="w-6 h-6" />
+          <SocialIcon platform={link.platform} className="w-5 h-5" />
         </a>
       ))}
     </div>

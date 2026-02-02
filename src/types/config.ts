@@ -44,6 +44,7 @@ export interface SiteConfig {
   bio: string;
   email: string;
   avatar?: string;
+  gravatarEmail?: string;
   social: SocialLinks;
   theme: ThemeConfig;
   contactForm: ContactFormConfig;

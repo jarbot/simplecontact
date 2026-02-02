@@ -2,19 +2,23 @@
 # Edit this file to customize your contact page
 
 # Personal Information
-name: "Your Name"
-title: "Software Developer"
-bio: "A brief description about yourself or your work."
-email: "contact@example.com"
+name: "Jared Gholston"
+title: "CTO & Co-founder PartnerTap"
+bio: "Building the future of partner ecosystems and channel collaboration at scale."
+email: ""
 
-# Profile Image (optional - place image in /public folder)
-# avatar: "/avatar.jpg"
+# Profile Image Options (in order of priority):
+# 1. avatar - Direct URL or local path (e.g., "/avatar.jpg" in public folder)
+# 2. gravatarEmail - Uses Gravatar if available
+# 3. Leave both empty for no avatar
+avatar: "/avatar.jpg"
+# gravatarEmail: "your@email.com"
 
 # Social Links (leave empty or remove to hide)
 social:
-  linkedin: "https://linkedin.com/in/yourprofile"
-  github: "https://github.com/yourusername"
-  twitter: "https://twitter.com/yourusername"
+  linkedin: "https://www.linkedin.com/in/jaredgholston/"
+  github: "https://github.com/jarbot"
+  twitter: "https://x.com/jarbot"
   # instagram: "https://instagram.com/yourusername"
   # facebook: "https://facebook.com/yourusername"
   # youtube: "https://youtube.com/@yourchannel"
@@ -24,28 +28,29 @@ social:
   # threads: "https://threads.net/@yourusername"
   # website: "https://yourwebsite.com"
 
-# Theme Configuration
+# Theme Configuration (colors are now auto-detected from system preference)
+# These are fallback colors if CSS variables aren't supported
 theme:
   primaryColor: "#0070f3"
-  backgroundColor: "#ffffff"
-  textColor: "#333333"
+  backgroundColor: "#F8F4F1"
+  textColor: "#1a1a1a"
   darkMode: false
 
 # Contact Form Settings
 contactForm:
-  enabled: true
+  enabled: false
   heading: "Get in Touch"
   description: "Have a question or want to work together? Send me a message!"
   successMessage: "Thank you for your message! I'll get back to you soon."
   # reCAPTCHA settings - site key goes here, secret key in environment variables
   recaptcha:
-    enabled: true
+    enabled: false
     # Get your site key from https://www.google.com/recaptcha/admin
     # The secret key should be set as RECAPTCHA_SECRET_KEY environment variable
     siteKey: "your-recaptcha-site-key"
 
 # SEO Settings
 seo:
-  title: "Contact Me"
-  description: "Get in touch with me through this contact page."
+  title: "Jared Gholston"
+  description: "CTO & Co-founder at PartnerTap - Building the future of partner ecosystems."
   # ogImage: "/og-image.jpg"

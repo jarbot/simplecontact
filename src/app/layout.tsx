@@ -19,16 +19,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const config = getConfig();
-
   return (
-    <html lang="en">
-      <body
-        style={{
-          backgroundColor: config.theme.backgroundColor,
-          color: config.theme.textColor,
-        }}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="color-scheme" content="light dark" />
+      </head>
+      <body className="min-h-screen">
         {children}
       </body>
     </html>

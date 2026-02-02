@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import crypto from 'crypto';
 import { SiteConfig } from '@/types/config';
 
 const configPath = path.join(process.cwd(), 'config', 'site.yaml');
@@ -41,4 +42,27 @@ export function getSocialLinks(config: SiteConfig): Array<{ platform: string; ur
   }
 
   return links;
+}
+
+/**
+ * Get the avatar URL with Gravatar fallback
+ * Priority: 1. Direct avatar URL 2. Gravatar 3. null
+ */
+export function getAvatarUrl(config: SiteConfig): string | null {
+  // If direct avatar is provided, use it
+  if (config.avatar) {
+    return config.avatar;
+  }
+
+  // If gravatarEmail is provided, generate Gravatar URL
+  if (config.gravatarEmail) {
+    const hash = crypto
+      .createHash('md5')
+      .update(config.gravatarEmail.toLowerCase().trim())
+      .digest('hex');
+    // d=404 returns 404 if no gravatar, size=400 for high quality
+    return `https://www.gravatar.com/avatar/${hash}?s=400&d=404`;
+  }
+
+  return null;
 }
