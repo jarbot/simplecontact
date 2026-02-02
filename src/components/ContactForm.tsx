@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useRef, FormEvent } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { useState, useEffect, useCallback, FormEvent } from 'react';
 
 interface ContactFormProps {
   heading: string;
@@ -9,6 +8,16 @@ interface ContactFormProps {
   successMessage: string;
   recaptchaEnabled: boolean;
   recaptchaSiteKey: string;
+}
+
+// Extend window for reCAPTCHA v3
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (callback: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  }
 }
 
 export function ContactForm({
@@ -23,7 +32,49 @@ export function ContactForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [recaptchaReady, setRecaptchaReady] = useState(false);
+
+  // Load reCAPTCHA v3 script
+  useEffect(() => {
+    if (!recaptchaEnabled || !recaptchaSiteKey) return;
+
+    // Check if already loaded
+    if (window.grecaptcha) {
+      window.grecaptcha.ready(() => setRecaptchaReady(true));
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
+    script.async = true;
+    script.onload = () => {
+      window.grecaptcha.ready(() => setRecaptchaReady(true));
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      const existingScript = document.querySelector(`script[src*="recaptcha"]`);
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, [recaptchaEnabled, recaptchaSiteKey]);
+
+  // Get reCAPTCHA token
+  const getRecaptchaToken = useCallback(async (): Promise<string> => {
+    if (!recaptchaEnabled || !recaptchaSiteKey || !recaptchaReady) {
+      return '';
+    }
+
+    try {
+      const token = await window.grecaptcha.execute(recaptchaSiteKey, { action: 'contact_submit' });
+      return token;
+    } catch (error) {
+      console.error('reCAPTCHA execution failed:', error);
+      return '';
+    }
+  }, [recaptchaEnabled, recaptchaSiteKey, recaptchaReady]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,16 +83,13 @@ export function ContactForm({
     setErrorMessage('');
 
     try {
-      let recaptchaToken = '';
+      // Get reCAPTCHA v3 token
+      const recaptchaToken = await getRecaptchaToken();
 
-      if (recaptchaEnabled && recaptchaRef.current) {
-        recaptchaToken = recaptchaRef.current.getValue() || '';
-
-        if (!recaptchaToken) {
-          setErrorMessage('Please complete the reCAPTCHA verification.');
-          setIsSubmitting(false);
-          return;
-        }
+      if (recaptchaEnabled && !recaptchaToken) {
+        setErrorMessage('reCAPTCHA verification failed. Please refresh and try again.');
+        setIsSubmitting(false);
+        return;
       }
 
       const response = await fetch('/api/contact', {
@@ -62,9 +110,6 @@ export function ContactForm({
         setSubmitStatus('success');
         setName('');
         setEmail('');
-        if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
-        }
       } else {
         setSubmitStatus('error');
         setErrorMessage(data.error || 'Something went wrong. Please try again.');
@@ -122,15 +167,6 @@ export function ContactForm({
               placeholder="your@email.com"
               aria-label="Your email"
             />
-
-            {recaptchaEnabled && recaptchaSiteKey && (
-              <div className="flex justify-center pt-2">
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={recaptchaSiteKey}
-                />
-              </div>
-            )}
 
             {submitStatus === 'error' && (
               <div className="p-4 rounded-xl text-sm" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>

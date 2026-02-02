@@ -44,9 +44,9 @@ contactForm:
   # reCAPTCHA settings - site key goes here, secret key in environment variables
   recaptcha:
     enabled: true
-    # Get your site key from https://www.google.com/recaptcha/admin
-    # The secret key should be set as RECAPTCHA_SECRET_KEY environment variable
-    siteKey: "your-recaptcha-site-key"
+    # Get your site key from https://www.google.com/recaptcha/admin (select v3)
+    # Secret key goes in RECAPTCHA_SECRET_KEY environment variable
+    siteKey: "6LdkmF0sAAAAACDbMTjYKGOTZQBganStqnV9egw_"
 
 # SEO Settings
 seo:
