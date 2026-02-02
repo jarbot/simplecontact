@@ -40,7 +40,7 @@ contactForm:
   enabled: true
   heading: "Get in Touch"
   description: "Have a question or want to work together? Send me a message!"
-  successMessage: "Thank you for your message! I'll get back to you soon."
+  successMessage: "Thank you for reaching out!"
   # reCAPTCHA settings - site key goes here, secret key in environment variables
   recaptcha:
     enabled: true

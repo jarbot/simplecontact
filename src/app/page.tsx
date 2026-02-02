@@ -1,8 +1,11 @@
+import { connection } from 'next/server';
 import { getConfig, getSocialLinks, getAvatarUrl } from '@/lib/config';
 import { SocialLinks } from '@/components/SocialLinks';
 import { ContactForm } from '@/components/ContactForm';
 
-export default function Home() {
+export default async function Home() {
+  // Force dynamic rendering so nonce is generated per-request
+  await connection();
   const config = getConfig();
   const socialLinks = getSocialLinks(config);
   const avatarUrl = getAvatarUrl(config);
