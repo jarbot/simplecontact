@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import { getConfig } from '@/lib/config';
 import './globals.css';
 
@@ -15,14 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const nonce = headersList.get('x-nonce') || '';
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -40,10 +36,9 @@ export default async function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
           rel="stylesheet"
-          nonce={nonce}
         />
       </head>
-      <body className="min-h-screen" data-nonce={nonce}>
+      <body className="min-h-screen">
         {children}
       </body>
     </html>
