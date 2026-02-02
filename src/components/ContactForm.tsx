@@ -34,7 +34,7 @@ export function ContactForm({
   const [errorMessage, setErrorMessage] = useState('');
   const [recaptchaReady, setRecaptchaReady] = useState(false);
 
-  // Load reCAPTCHA v3 script
+  // Load reCAPTCHA v3 script with nonce for CSP compliance
   useEffect(() => {
     if (!recaptchaEnabled || !recaptchaSiteKey) return;
 
@@ -44,9 +44,15 @@ export function ContactForm({
       return;
     }
 
+    // Get nonce from body data attribute (set by server)
+    const nonce = document.body.dataset.nonce || '';
+
     const script = document.createElement('script');
     script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
     script.async = true;
+    if (nonce) {
+      script.nonce = nonce;
+    }
     script.onload = () => {
       window.grecaptcha.ready(() => setRecaptchaReady(true));
     };
