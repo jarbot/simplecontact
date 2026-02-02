@@ -1,10 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveContact } from '@/lib/db';
+import { sendContactNotification } from '@/lib/email';
 import { verifyRecaptcha } from '@/lib/recaptcha';
 import { getConfig } from '@/lib/config';
+import { checkRateLimit, getRateLimitHeaders } from '@/lib/ratelimit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Get client IP for rate limiting
+    const ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+                      request.headers.get('x-real-ip') ||
+                      'unknown';
+
+    // Check rate limit
+    const rateLimitResult = checkRateLimit(ipAddress);
+    const rateLimitHeaders = getRateLimitHeaders(rateLimitResult);
+
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: 'Too many submissions. Please try again later.' },
+        { status: 429, headers: rateLimitHeaders }
+      );
+    }
+
     const config = getConfig();
     const body = await request.json();
     const { name, email, recaptchaToken } = body;
@@ -51,27 +68,31 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Get client info for logging
-    const ipAddress = request.headers.get('x-forwarded-for') ||
-                      request.headers.get('x-real-ip') ||
-                      'unknown';
+    // Get client info
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Save to database
-    const result = saveContact({
+    // Send email notification
+    const result = await sendContactNotification({
       name: name.trim(),
       email: email.trim().toLowerCase(),
       ipAddress,
       userAgent,
     });
 
+    if (!result.success) {
+      console.error('Failed to send notification:', result.error);
+      return NextResponse.json(
+        { error: 'Failed to process submission. Please try again.' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: true,
-        message: 'Contact submission received',
-        id: result.id
+        message: 'Message sent successfully',
       },
-      { status: 201 }
+      { status: 201, headers: rateLimitHeaders }
     );
   } catch (error) {
     console.error('Contact submission error:', error);
