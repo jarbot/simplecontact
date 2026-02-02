@@ -7,12 +7,11 @@ title: "CTO & Co-founder PartnerTap"
 bio: "Building the future of partner ecosystems and channel collaboration at scale."
 email: ""
 
-# Profile Image Options (in order of priority):
-# 1. avatar - Direct URL or local path (e.g., "/avatar.jpg" in public folder)
-# 2. gravatarEmail - Uses Gravatar if available
-# 3. Leave both empty for no avatar
-avatar: "/avatar.jpg"
-# gravatarEmail: "your@email.com"
+# Profile Image
+# Auto-detects avatar.png, avatar.jpg, avatar.jpeg, or avatar.webp in /public folder
+# Or specify a custom path/URL:
+# avatar: "/custom-image.png"
+# gravatarEmail: "your@email.com"  # Alternative: use Gravatar
 
 # Social Links (leave empty or remove to hide)
 social:
@@ -38,13 +37,13 @@ theme:
 
 # Contact Form Settings
 contactForm:
-  enabled: false
+  enabled: true
   heading: "Get in Touch"
   description: "Have a question or want to work together? Send me a message!"
   successMessage: "Thank you for your message! I'll get back to you soon."
   # reCAPTCHA settings - site key goes here, secret key in environment variables
   recaptcha:
-    enabled: false
+    enabled: true
     # Get your site key from https://www.google.com/recaptcha/admin
     # The secret key should be set as RECAPTCHA_SECRET_KEY environment variable
     siteKey: "your-recaptcha-site-key"

@@ -45,13 +45,24 @@ export function getSocialLinks(config: SiteConfig): Array<{ platform: string; ur
 }
 
 /**
- * Get the avatar URL with Gravatar fallback
- * Priority: 1. Direct avatar URL 2. Gravatar 3. null
+ * Get the avatar URL
+ * Priority: 1. Direct avatar path/URL 2. Auto-detect in public folder 3. Gravatar 4. null
  */
 export function getAvatarUrl(config: SiteConfig): string | null {
   // If direct avatar is provided, use it
   if (config.avatar) {
     return config.avatar;
+  }
+
+  // Auto-detect avatar in public folder (supports png, jpg, jpeg, webp)
+  const publicDir = path.join(process.cwd(), 'public');
+  const avatarExtensions = ['png', 'jpg', 'jpeg', 'webp'];
+
+  for (const ext of avatarExtensions) {
+    const avatarPath = path.join(publicDir, `avatar.${ext}`);
+    if (fs.existsSync(avatarPath)) {
+      return `/avatar.${ext}`;
+    }
   }
 
   // If gravatarEmail is provided, generate Gravatar URL
